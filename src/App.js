@@ -12,9 +12,21 @@ import "./App.css";
 //* button (ADD) -> add to list
 //* button (bottom) -> trigger the randomizer
 
+const defaultItems = JSON.parse(localStorage.getItem("items")) || [];
+
+const storeToLocal = (items) => {
+  localStorage.setItem("items", JSON.stringify(items));
+};
+
 const App = () => {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(defaultItems);
   const [inputValue, setInputValue] = useState("");
+
+  const updateItems = (newItems) => {
+    //store to localStorage
+    storeToLocal(newItems);
+    setItems(newItems);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -23,20 +35,14 @@ const App = () => {
       selected: false,
     };
     const newItems = [...items, newItem];
+    updateItems(newItems);
     setInputValue("");
-    setItems(newItems);
   };
 
   const randomizer = () => {
-    clearSelected();
     for (let i = 0; i < 20; i++) {
       setTimeout(pickRandomItem, 100 * i);
     }
-  };
-
-  const clearSelected = () => {
-    const newItems = items.map((item) => ({ ...item, selected: false }));
-    setItems(newItems);
   };
 
   const pickRandomItem = () => {
@@ -46,12 +52,12 @@ const App = () => {
         ? { ...item, selected: true }
         : { ...item, selected: false }
     );
-    setItems(newItems);
+    updateItems(newItems);
   };
 
   const removeItem = (i) => {
     const newItems = items.filter((_, id) => id !== i);
-    setItems(newItems);
+    updateItems(newItems);
   };
 
   return (

@@ -42,7 +42,9 @@ const App = () => {
   const pickRandomItem = () => {
     const randomItem = items[Math.floor(Math.random() * items.length)];
     const newItems = items.map((item) =>
-      item === randomItem ? { ...item, selected: true } : item
+      item === randomItem
+        ? { ...item, selected: true }
+        : { ...item, selected: false }
     );
     setItems(newItems);
   };

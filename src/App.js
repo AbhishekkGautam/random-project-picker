@@ -12,27 +12,8 @@ import "./App.css";
 //* button (ADD) -> add to list
 //* button (bottom) -> trigger the randomizer
 
-const defaultItems = [
-  {
-    text: "Elon Musk",
-    selected: false,
-  },
-  {
-    text: "Jeff Bezos",
-    selected: false,
-  },
-  {
-    text: "Abhishek Gautam",
-    selected: false,
-  },
-  {
-    text: "Bill Gates",
-    selected: false,
-  },
-];
-
 const App = () => {
-  const [items, setItems] = useState(defaultItems);
+  const [items, setItems] = useState([]);
   const [inputValue, setInputValue] = useState("");
 
   const handleSubmit = (e) => {
@@ -63,6 +44,11 @@ const App = () => {
     const newItems = items.map((item) =>
       item === randomItem ? { ...item, selected: true } : item
     );
+    setItems(newItems);
+  };
+
+  const removeItem = (i) => {
+    const newItems = items.filter((_, id) => id !== i);
     setItems(newItems);
   };
 
@@ -100,8 +86,11 @@ const App = () => {
               return (
                 <li
                   key={index}
-                  className={`my-4 py-2 px-4 rounded shadow ${
-                    item.selected ? "bg-red-200" : ""
+                  onDoubleClick={() => {
+                    removeItem(index);
+                  }}
+                  className={`my-4 py-2 px-4 rounded shadow cursor-pointer ${
+                    item.selected ? "bg-yellow-300" : ""
                   }`}
                 >
                   {item.text}
@@ -111,18 +100,23 @@ const App = () => {
           )}
         </ul>
       </div>
-      {items.length === 0 ? (
-        <button className="w-full py-2 px-6 bg-gray-200 text-black transition-all duration-100 ease-linear rounded-md pointer-events-none">
-          Randomize
-        </button>
-      ) : (
-        <button
-          className="w-full py-2 px-6 bg-blue-400 text-white hover:bg-opacity-90 transition-all duration-100 ease-linear rounded-md focus:outline-none"
-          onClick={randomizer}
-        >
-          Randomize
-        </button>
-      )}
+      <div className="">
+        {items.length === 0 ? (
+          <button className="w-full py-2 px-6 bg-gray-200 text-black transition-all duration-100 ease-linear rounded-md pointer-events-none">
+            Randomize
+          </button>
+        ) : (
+          <button
+            className="w-full py-2 px-6 bg-blue-400 text-white hover:bg-opacity-90 transition-all duration-100 ease-linear rounded-md focus:outline-none"
+            onClick={randomizer}
+          >
+            Randomize
+          </button>
+        )}
+        <small className="text-gray-500 inline-block mt-2">
+          * Double click to remove an item.
+        </small>
+      </div>
     </div>
   );
 };

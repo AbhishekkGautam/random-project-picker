@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import Lottie from "react-lottie";
+import animationData from "./confetti-cannons.json";
 import "./App.css";
 
 //todo: RANDOM PICKER
@@ -23,6 +25,7 @@ const storeToLocal = (items) => {
 const App = () => {
   const [items, setItems] = useState(defaultItems);
   const [inputValue, setInputValue] = useState("");
+  const [isStopped, setIsStopped] = useState(true);
 
   const updateItems = (newItems) => {
     //store to localStorage
@@ -41,10 +44,24 @@ const App = () => {
     setInputValue("");
   };
 
+  const displayLottie = () => {
+    setTimeout(() => {
+      setIsStopped(false);
+    }, 1890);
+  };
+
+  const hideLottie = () => {
+    setTimeout(() => {
+      setIsStopped(true);
+    }, 6000);
+  };
+
   const randomizer = () => {
     for (let i = 0; i < 20; i++) {
       setTimeout(pickRandomItem, 100 * i);
     }
+    displayLottie();
+    hideLottie();
   };
 
   const pickRandomItem = () => {
@@ -66,6 +83,15 @@ const App = () => {
     if (inputValue === "" && e.keyCode === 13) {
       return false;
     }
+  };
+
+  const defaultOptions = {
+    loop: true,
+    autoplay: false,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
   };
 
   return (
@@ -97,7 +123,12 @@ const App = () => {
           </button>
         </form>
 
-        <div className="my-8">
+        <div className="my-8 relative">
+          <div className="absolute mx-28">
+            {!isStopped && (
+              <Lottie options={defaultOptions} height={200} width={200} />
+            )}
+          </div>
           <ul>
             {items.length <= 0 ? (
               <h1 className="text-center font-medium  text-gray-300">

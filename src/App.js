@@ -124,7 +124,7 @@ const App = () => {
         </form>
 
         <div className="my-8 relative">
-          <div className="absolute mx-28">
+          <div className="absolute mx-16 md:mx-20 lg:mx-28">
             {!isStopped && (
               <Lottie options={defaultOptions} height={200} width={200} />
             )}
